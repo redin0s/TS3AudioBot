@@ -54,7 +54,20 @@ namespace TS3AudioBot.Web.Api
 			this.coreInjector = coreInjector;
 			this.tokenManager = tokenManager;
 			this.stats = stats;
+            this.Config();
 		}
+
+        public void Config()
+        {
+            if (string.IsNullOrEmpty(config.Token) || config.Token.Value.Length < ApiToken.TokenLen || string.IsNullOrEmpty(config.AdminUid))
+            {
+                Log.Debug(String.Format("No default admin token provided or Length is different than {0}"), ApiToken.TokenLen);
+            }
+            else
+            {
+                this.tokenManager.SetToken(config.AdminUid, config.Token);
+            }
+        }
 
 		public async Task ProcessApiV1Call(HttpContext context)
 		{

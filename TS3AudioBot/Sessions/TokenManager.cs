@@ -35,21 +35,26 @@ namespace TS3AudioBot.Sessions
 			if (string.IsNullOrEmpty(authId))
 				throw new ArgumentNullException(nameof(authId));
 
+			var token = TextUtil.GenToken(ApiToken.TokenLen);
+
+            this.SetToken(authId, token, timeout);
+
+			return string.Format(TokenFormat, authId, token);
+		}
+
+        public void SetToken(string authId, string tokenstr, TimeSpan? timeout = null)
+        {
 			var token = new ApiToken(
-				TextUtil.GenToken(ApiToken.TokenLen),
+				tokenstr,
 				AddTimeSpanSafe(Tools.Now, timeout ?? ApiToken.DefaultTokenTimeout));
-
-			dbTokenCache[authId] = token;
-
-			dbTokenList.Upsert(new DbApiToken
+            dbTokenCache[authId] = token;
+            dbTokenList.Upsert(new DbApiToken
 			{
 				UserUid = authId,
 				Token = token.Value,
 				ValidUntil = token.Timeout
 			});
-
-			return string.Format(TokenFormat, authId, token.Value);
-		}
+        }
 
 		private static DateTime AddTimeSpanSafe(DateTime dateTime, TimeSpan addSpan)
 		{

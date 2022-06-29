@@ -121,6 +121,8 @@ namespace TS3AudioBot.Config
 		public ConfigValue<int> CommandComplexity { get; } = new ConfigValue<int>("command_complexity", 64,
 			"Limits the maximum command complexity to prevent endless loops.");
 		public ConfigValue<string> Matcher { get; } = new ConfigValue<string>("matcher", "exact", "See: bot.commands.matcher");
+        public ConfigValue<string> AdminUid { get; } = new ConfigValue<string>("admin", "", "If set with token it creates a default admin token (matching the rights.toml)");
+        public ConfigValue<string> Token { get; } = new ConfigValue<string>("token", "", "If set it creates an api token for the admin user");
 	}
 
 	public class ConfWebInterface : ConfigTable
